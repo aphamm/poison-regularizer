@@ -1,17 +1,17 @@
-This repository contains the official PyTorch implementation of the following paper:
+# poison-regularizer
 
-**CyCLIP: Cyclic Contrastive Language-Image Pretraining**<br>
-Shashank Goel (UCLA), Hritik Bansal (UCLA), Sumit Bhatia (MDSR Lab, Adobe Systems), Ryan A. Rossi (Adobe Research), Vishwa Vinay (Adobe Research), Aditya Grover (UCLA)<br>
-[https://arxiv.org/abs/2205.14459](https://arxiv.org/abs/2205.14459)
+We hope to find a regularizer to help mitigate posioned attacks on current SOTA language vision models. 
 
-Clone the repository.
+# Setup
+
+Clone the Repository
 
 ```
 git clone git@github.com:onlypham/poison-regularizer.git
 cd poison-regularizer
 ```
 
-Creating conda environment.
+Create Conda Environment
 
 ```
 # source ../conda/bin/activate
@@ -20,7 +20,7 @@ conda activate poison-regularizer
 conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
 ```
 
-Installing packages & pythonpath.
+Installing Packages
 
 ```
 pip install wandb
@@ -34,7 +34,22 @@ pip install kaggle
 export PYTHONPATH="$PYTHONPATH:$PWD/pkgs/openai"
 ```
 
-Download CC Images.
+Download [Conceptual Captions](https://ai.google.com/research/ConceptualCaptions/download)
+
+```
+# place in corresponding directories
+data/GCC/Train_GCC-training.tsv
+data/GCC/Validation_GCC-1.1.0-Validation.tsv
+```
+
+Create Cut Version of Conceptual Captions
+
+```
+# keep first 10,000 lines
+python3 utils/cut.py
+```
+
+Download CC Images
 
 ```
 python3 utils/gather_cc.py data/GCC/Train_GCC-training.tsv
@@ -57,6 +72,10 @@ python3 src/main.py --name pham --model_name RN50 \
   --eval_train_data_dir data/CIFAR10/train
 ```
 
-Notes:
+This repository contains the official PyTorch implementation of the following paper:
 
-self.root, self.images[idx] -> self.images[idx] (data.py)
+**CyCLIP: Cyclic Contrastive Language-Image Pretraining**<br>
+Shashank Goel (UCLA), Hritik Bansal (UCLA), Sumit Bhatia (MDSR Lab, Adobe Systems), Ryan A. Rossi (Adobe Research), Vishwa Vinay (Adobe Research), Aditya Grover (UCLA)<br>
+[https://arxiv.org/abs/2205.14459](https://arxiv.org/abs/2205.14459)
+
+Changes: self.root, self.images[idx] -> self.images[idx] (data.py)
