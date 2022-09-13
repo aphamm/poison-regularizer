@@ -142,6 +142,5 @@ dmypy.json
 # Data
 data/GCC/cc_data
 data/GCC/*.csv
-data/GCC/Train_GCC-training.tsv
-data/GCC/Validation_GCC-1.1.0-Validation.tsv
+data/GCC/*.tsv
 data/CIFAR10/cifar-10*

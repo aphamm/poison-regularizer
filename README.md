@@ -14,7 +14,7 @@ cd poison-regularizer
 Create Conda Environment
 
 ```
-# source ../conda/bin/activate
+source ../conda/bin/activate
 conda create --name poison-regularizer python=3.10
 conda activate poison-regularizer
 conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
@@ -62,14 +62,37 @@ python3 utils/gather_cc.py data/GCC/Validation_GCC-1.1.0-Validation-cut.tsv
 Run Model
 
 ```
-python3 src/main.py --name pham --model_name RN50 \
+python3 src/main.py --name 100K_regularization --model_name RN50 \
   --train_data data/GCC/Train_GCC-training-cut_output.csv \
   --validation_data data/GCC/Validation_GCC-1.1.0-Validation-cut_output.csv \
-  --device gpu --num_workers 8 \
+  --eval_data_type CIFAR10 \
+  --eval_test_data_dir data/CIFAR10/test \
+  --eval_train_data_dir data/CIFAR10/train \
   --image_key filepath --caption_key title \
-  --epochs 3 --batch_size 128 \
-  --eval_data_type CIFAR10 --eval_test_data_dir data/CIFAR10/test \
-  --eval_train_data_dir data/CIFAR10/train
+  --device gpu --wandb --num_workers 8 \
+  --cylambda1 0.25 --cylambda2 0.25 \
+  --pretrained --distributed
+
+python3 src/main.py --name 100K_regularization_poison --model_name RN50 \
+  --train_data data/GCC/Train_GCC-training-cut_output_poison.csv \
+  --validation_data data/GCC/Validation_GCC-1.1.0-Validation-cut_output.csv \
+  --eval_data_type CIFAR10 \
+  --eval_test_data_dir data/CIFAR10/test \
+  --eval_train_data_dir data/CIFAR10/train \
+  --image_key filepath --caption_key title \
+  --device gpu --wandb --num_workers 8 \
+  --cylambda1 0.25 --cylambda2 0.25 \
+  --pretrained --distributed
+
+python3 src/main.py --name 100K_no_regularization --model_name RN50 \
+  --train_data data/GCC/Train_GCC-training-cut_output.csv \
+  --validation_data data/GCC/Validation_GCC-1.1.0-Validation-cut_output.csv \
+  --eval_data_type CIFAR10 \
+  --eval_test_data_dir data/CIFAR10/test \
+  --eval_train_data_dir data/CIFAR10/train \
+  --image_key filepath --caption_key title \
+  --device gpu --wandb --num_workers 8 \
+  --pretrained --distributed
 ```
 
 This repository contains the official PyTorch implementation of the following paper:

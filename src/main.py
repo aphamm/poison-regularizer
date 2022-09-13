@@ -100,7 +100,7 @@ def worker(rank, options, logger):
 
     if(options.wandb and options.master):
         logging.debug("Starting wandb")
-        wandb.init(project = "mrl", notes = options.notes, tags = [], config = vars(options))
+        wandb.init(project = "poison-regularizer", notes = options.notes, tags = [], config = vars(options))
         wandb.run.name = options.name
         wandb.save(os.path.join(options.log_dir_path, "params.txt"))
 
@@ -126,13 +126,13 @@ def worker(rank, options, logger):
 
             metrics = evaluate(epoch, model, processor, data, options)
 
-            if(options.master):
-                checkpoint = {"epoch": epoch, "name": options.name, "state_dict": model.state_dict(), "optimizer": optimizer.state_dict()}
-                torch.save(checkpoint, os.path.join(options.checkpoints_dir_path, f"epoch_{epoch}.pt"))
-                if("loss" in metrics):
-                    if(metrics["loss"] < best_loss):
-                        best_loss = metrics["loss"]
-                        torch.save(checkpoint, os.path.join(options.checkpoints_dir_path, f"epoch.best.pt"))
+            # if(options.master):
+            #     checkpoint = {"epoch": epoch, "name": options.name, "state_dict": model.state_dict(), "optimizer": optimizer.state_dict()}
+            #     torch.save(checkpoint, os.path.join(options.checkpoints_dir_path, f"epoch_{epoch}.pt"))
+            #     if("loss" in metrics):
+            #         if(metrics["loss"] < best_loss):
+            #             best_loss = metrics["loss"]
+            #             torch.save(checkpoint, os.path.join(options.checkpoints_dir_path, f"epoch.best.pt"))
 
     if(options.distributed):
         dist.destroy_process_group()
